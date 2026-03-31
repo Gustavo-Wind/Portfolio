@@ -1,0 +1,29 @@
+<meta charset="UTF-8"> -> para ter acentuação correta.
+<link rel="icon" href="diretorio/icone" type="image/x-icon"> -> para mudar icone da aba navegador.
+target="_blank" -> abrir em nova aba
+<div class="mobile-menu-icon">&#9776;</div> -> 3 riscos para menu de mobile
+.container{
+    max-width: 1200px;
+    padding:  0 20px;
+    margin: 10px auto;
+} -> para manter centralizado menu
+
+background: linear-gradient(
+        90deg,
+        rgba(26, 127, 243, 1) 0%,
+        rgba(187,109, 214, 1) 35%,
+        rgba(203, 36, 100, 1) 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #d9d9d9;
+} -> para fazer gradiente no texto 
+
+.disable{
+   opacity: 0.8; 
+   pointer-events: none;
+   background-color: #f2f2f2;
+   box-shadow: none;
+   cursor: not-allowed;
+} -> para criar aspecto de botao desabilitado (aprendi fazendo uma seta)
