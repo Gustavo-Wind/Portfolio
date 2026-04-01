@@ -27,3 +27,20 @@ background: linear-gradient(
    box-shadow: none;
    cursor: not-allowed;
 } -> para criar aspecto de botao desabilitado (aprendi fazendo uma seta)
+
+ARQUIVO package.json nodemailer
+
+"engine": {
+    "node" : "18"
+  }, -> versao do node
+
+"scripts": {
+    "dev" : "tsx src/server.ts",
+    "build" : "tsup src",
+    "start" : "node dist/server.js"
+  }, -> dev: fazer o comando npm dev rodar o arquivo server.ts
+     -> build: quando rodar esse aquivo o que for typeScript rodará como JavaScript 
+     -> start: apos rodar o buil gera um repositório dist que fará a extenção ser trocada .js
+
+
+////////////////////////////////////////////////////////////////
