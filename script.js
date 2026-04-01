@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 const prevButton = document.querySelector(".prev-testimonial");
 const nextButton = document.querySelector(".next-testimonial");
-const cards = document.querySelector(".container-testimonials > div");
+const cards = document.querySelectorAll(".container-testimonials > div");
 
 let currentIndex = 0;
 
