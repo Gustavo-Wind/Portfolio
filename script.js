@@ -76,6 +76,14 @@ document.addEventListener("DOMContentLoaded"), function(){
         form.style.display = "none";
         successMessage.style.display = "none";
         errorMessage.style.display = "none";
-        form.style.display = "block";
+        loadingMessage.style.display = "block";
+
+        const data = {
+            to: "gustavowinddeveloper@gmail.com",
+            from: "gustavowindbot.hotmail.com",
+            subject: "Contato do site",
+            text: "Contato do site",
+            html: '<p>Nome: ${nome}</p><br/><p>Email: ${email}</p><br/><p>Assunto: ${assunto}</p><br/><p>Mensagem: ${mensagem}</p><br/>'
+        }
     })
 }
