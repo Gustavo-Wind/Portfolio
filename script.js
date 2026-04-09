@@ -1,89 +1,129 @@
-document.addEventListener("DOMContentLoaded", function(){
-    const mobileMenuIcon = document.querySelector(".mobile-menu-icon");
-    const mobileMenu = document.querySelector(".menu");
+document.addEventListener("DOMContentLoaded", function () {
 
-    mobileMenuIcon.addEventListener("click", function(){
-        mobileMenu.classList.toggle("mobile-menu-open");
-    });
-});
+    // ── Menu mobile ───────────────────────────────────────────
+    var mobileMenuIcon = document.querySelector(".mobile-menu-icon");
+    var mobileMenu = document.querySelector(".menu");
 
-/* Slider de depoimentos */
-
-const prevButton = document.querySelector(".prev-testimonial");
-const nextButton = document.querySelector(".next-testimonial");
-const cards = document.querySelectorAll(".container-testimonials > div");
-
-let currentIndex = 0;
-
-function showCards(){
-    cards.forEach((card, index) =>{
-        if(index >= currentIndex && index < currentIndex + getVisibleCardCount()){
-            card.style.display = "block";
-        }
-        else{
-            card.style.display = "none";
-        }
-    });
-
-    const disablePrevButton = currentIndex === 0;
-    disablePrevButton ? prevButton.classList.add('disable') : prevButton.classList.remove('disable');
-
-    const disableNextButton = currentIndex + getVisibleCardCount() >= cards.length;
-    disableNextButton ? nextButton.classList.add('disable') : nextButton.classList.remove('disable');
-
-}
-
-function getVisibleCardCount(){
-    const mobileScreenWidth = 1200;
-
-    return window.innerWidth <= mobileScreenWidth ? 1 : 3;
-}
-function prevCard(){
-    if(currentIndex > 0){
-        currentIndex -= 1;
+    if (mobileMenuIcon && mobileMenu) {
+        mobileMenuIcon.addEventListener("click", function () {
+            mobileMenu.classList.toggle("mobile-menu-open");
+        });
     }
-    showCards();
-}
 
-function nextCard(){
-    if(currentIndex + getVisibleCardCount() < cards.length){
-        currentIndex += 1;
+    // ── Slider de depoimentos ─────────────────────────────────
+    var prevButton = document.querySelector(".prev-testimonial");
+    var nextButton = document.querySelector(".next-testimonial");
+    var cards = document.querySelectorAll(".container-testimonials > div");
+    var currentIndex = 0;
+
+    function getVisibleCardCount() {
+        return window.innerWidth <= 1200 ? 1 : 3;
     }
-    showCards();
-} 
 
-prevButton.addEventListener("click", prevCard);
-nextButton.addEventListener("click", nextCard);
-showCards();
-window.addEventListener("resize", showCards);
+    function showCards() {
+        cards.forEach(function (card, index) {
+            card.style.display =
+                index >= currentIndex && index < currentIndex + getVisibleCardCount()
+                    ? "block"
+                    : "none";
+        });
 
-/* Contato do site */
+        prevButton.classList.toggle("disable", currentIndex === 0);
+        nextButton.classList.toggle(
+            "disable",
+            currentIndex + getVisibleCardCount() >= cards.length
+        );
+    }
 
-document.addEventListener("DOMContentLoaded"), function(){
-    const form = document.querySelector("form")
-    const successMessage = document.getElementById("success-message")
-    const errorMessage = document.getElementById("error-message")
-    const loadingMessage = document.getElementById("loading-message")
+    if (prevButton && nextButton && cards.length > 0) {
+        prevButton.addEventListener("click", function () {
+            if (currentIndex > 0) currentIndex -= 1;
+            showCards();
+        });
 
-    form.addEventListener("submit", function(e){
-        e.preventDefault();  
+        nextButton.addEventListener("click", function () {
+            if (currentIndex + getVisibleCardCount() < cards.length) currentIndex += 1;
+            showCards();
+        });
 
-        const nome = document.getElementById(nome).value;
-        const email = document.getElementById(email).value;
-        const assunto = document.getElementById(assunto).value;
-        const mensagem = document.getElementById(mensagem).value;
+        showCards();
+        window.addEventListener("resize", showCards);
+    }
 
+    // ── Formulário de contato ─────────────────────────────────
+    var form = document.querySelector("form");
+    var loadingMsg = document.getElementById("loading-message");
+    var successMsg = document.getElementById("success-message");
+    var errorMsg = document.getElementById("error-message");
+
+    // Verifica se todos os elementos existem antes de continuar
+    if (!form || !loadingMsg || !successMsg || !errorMsg) {
+        console.warn("Formulário ou elementos de feedback não encontrados no HTML.");
+        return;
+    }
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        var nome = document.getElementById("nome").value.trim();
+        var email = document.getElementById("email").value.trim();
+        var assunto = document.getElementById("assunto").value.trim();
+        var mensagem = document.getElementById("mensagem").value.trim();
+
+        // Reset de mensagens anteriores
+        errorMsg.style.display = "none";
+        successMsg.style.display = "none";
+
+        // Validação de campos obrigatórios
+        if (!nome || !email || !assunto || !mensagem) {
+            errorMsg.textContent = "Por favor, preencha todos os campos.";
+            errorMsg.style.display = "block";
+            return;
+        }
+
+        
+
+        // Exibe loading e esconde form
         form.style.display = "none";
-        successMessage.style.display = "none";
-        errorMessage.style.display = "none";
-        loadingMessage.style.display = "block";
+        loadingMsg.style.display = "block";
 
-        const data = {
+        var payload = {
             to: "gustavowinddeveloper@gmail.com",
-            from: "gustavowindbot.hotmail.com",
-            subject: "Contato do site",
-            text: "Contato do site",
-            html: '<p>Nome: ${nome}</p><br/><p>Email: ${email}</p><br/><p>Assunto: ${assunto}</p><br/><p>Mensagem: ${mensagem}</p><br/>'
-        }
-    })
-}
+            subject: "Contato do site: " + assunto,
+            html:
+                "<p><strong>Nome:</strong> " + nome + "</p>" +
+                "<p><strong>E-mail:</strong> " + email + "</p>" +
+                "<p><strong>Assunto:</strong> " + assunto + "</p>" +
+                "<p><strong>Mensagem:</strong> " + mensagem + "</p>"
+        };
+
+        fetch("https://email-api-09u4.onrender.com/send-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        })
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (result) {
+                loadingMsg.style.display = "none";
+
+                if (result.success) {
+                    successMsg.style.display = "block";
+                    form.reset();
+                } else {
+                    form.style.display = "block";
+                    errorMsg.textContent = "Erro ao enviar. Tente novamente.";
+                    errorMsg.style.display = "block";
+                }
+            })
+            .catch(function (error) {
+                loadingMsg.style.display = "none";
+                form.style.display = "block";
+                errorMsg.textContent = "Erro ao enviar mensagem. Envie um e-mail para gustavowinddeveloper@gmail.com";
+                errorMsg.style.display = "block";
+                console.error("Erro ao enviar:", error);
+            });
+    });
+
+});
